@@ -3,10 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
       body {
-        padding: 0;
+        padding: 10px;
         margin: 0;
+        max-width: 100%;
       }
 
       svg:not(:root) {
@@ -42,13 +44,19 @@
       }
 
       video {
-        margin-top: 20px;
+        margin: 20px auto;
         border: 1px solid black;
+        max-width: 100%;
+        height: auto;
+        display: block;
       }
 
       .button {
         cursor: pointer;
-        width: 150px;
+        width: 100%;
+        max-width: 150px;
+        margin: 10px auto;
+        display: block;
         border: 1px solid black;
         font-size: 16px;
         text-align: center;
@@ -60,25 +68,26 @@
 
       .wrapper {
         margin-bottom: 10px;
-        width: 600px;
+        width: 100%;
+        max-width: 600px;
       }
 
       .trackrow {
-        height: 200px;
+        height: auto;
+        margin-bottom: 20px;
       }
 
-      .leftside {
-        float: left;
-        width: calc(calc(100% / 2) - 10px);
-      }
-
+      .leftside,
       .rightside {
-        float: right;
-        width: calc(calc(100% / 2) - 10px);
+        float: none;
+        width: 100%;
+        margin-bottom: 15px;
       }
 
       textarea {
         padding: 8px;
+        width: 100%;
+        box-sizing: border-box;
       }
 
       h3 {
@@ -86,11 +95,32 @@
       }
 
       #supportedConstraints {
-        column-count: 2;
+        column-count: 1;
       }
 
       #log {
         padding-top: 10px;
+      }
+
+      @media (min-width: 768px) {
+        .leftside {
+          float: left;
+          width: calc(50% - 10px);
+        }
+
+        .rightside {
+          float: right;
+          width: calc(50% - 10px);
+        }
+
+        .button {
+          display: inline-block;
+          margin: 10px 0;
+        }
+
+        #supportedConstraints {
+          column-count: 2;
+        }
       }
     </style>
 

@@ -2,3 +2,4 @@ https://developer.mozilla.org/en-US/docs/Web/API/Media_Capture_and_Streams_API/C
 
 Modifications:
 - Works on iOS safari
+- Styling to support mobile browsers
