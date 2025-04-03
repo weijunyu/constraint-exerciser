@@ -141,6 +141,16 @@
 
     <h3>Constrainable properties available:</h3>
     <ul id="supportedConstraints"></ul>
+
+    <h3>Supported VideoRecorder Codecs:</h3>
+    <section>
+      <h3>Video Codecs:</h3>
+      <ul id="videoCodecs"></ul>
+
+      <h3>Audio Codecs:</h3>
+      <ul id="audioCodecs"></ul>
+    </section>
+
     <div id="startButton" class="button">Start</div>
     <div class="wrapper">
       <div class="trackrow">
@@ -366,6 +376,72 @@
           `Error <code>${reason.name}</code> in constraint <code>${reason.constraint}</code>: ${reason.message}`
         );
       }
+
+      // Add codec detection
+      async function detectCodecs() {
+        const videoCodecs = [
+          { mimeType: "video/webm;codecs=vp8" },
+          { mimeType: "video/webm;codecs=vp9" },
+          { mimeType: "video/webm;codecs=h264" },
+          { mimeType: "video/mp4;codecs=h264" },
+          { mimeType: "video/mp4;codecs=avc1" },
+          { mimeType: "video/3gpp" },
+          { mimeType: "video/ogg" },
+          { mimeType: "video/quicktime" },
+          { mimeType: "video/x-matroska" }
+        ];
+
+        const audioCodecs = [
+          { mimeType: "audio/webm;codecs=opus" },
+          { mimeType: "audio/webm;codecs=vorbis" },
+          { mimeType: "audio/mp4;codecs=mp4a" },
+          { mimeType: "audio/mp4;codecs=aac" },
+          { mimeType: "audio/mp4" },
+          { mimeType: "audio/ogg" },
+          { mimeType: "audio/wav" },
+          { mimeType: "audio/x-wav" },
+          { mimeType: "audio/mpeg" },
+          { mimeType: "audio/aac" }
+        ];
+
+        const videoCodecsList = document.getElementById("videoCodecs");
+        const audioCodecsList = document.getElementById("audioCodecs");
+
+        // Check video codecs
+        for (const codec of videoCodecs) {
+          try {
+            const isSupported = MediaRecorder.isTypeSupported(codec.mimeType);
+            const li = document.createElement("li");
+            li.textContent = `${codec.mimeType} - ${
+              isSupported ? "Supported" : "Not Supported"
+            }`;
+            videoCodecsList.appendChild(li);
+          } catch (error) {
+            const li = document.createElement("li");
+            li.textContent = `${codec.mimeType} - Error checking support`;
+            videoCodecsList.appendChild(li);
+          }
+        }
+
+        // Check audio codecs
+        for (const codec of audioCodecs) {
+          try {
+            const isSupported = MediaRecorder.isTypeSupported(codec.mimeType);
+            const li = document.createElement("li");
+            li.textContent = `${codec.mimeType} - ${
+              isSupported ? "Supported" : "Not Supported"
+            }`;
+            audioCodecsList.appendChild(li);
+          } catch (error) {
+            const li = document.createElement("li");
+            li.textContent = `${codec.mimeType} - Error checking support`;
+            audioCodecsList.appendChild(li);
+          }
+        }
+      }
+
+      // Call codec detection when the page loads
+      detectCodecs();
     </script>
   </body>
 </html>
