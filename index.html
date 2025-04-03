@@ -122,6 +122,10 @@
           column-count: 2;
         }
       }
+
+      .supported-codec {
+        color: green;
+      }
     </style>
 
     <title>
@@ -381,10 +385,19 @@
       async function detectCodecs() {
         const videoCodecs = [
           { mimeType: "video/webm;codecs=vp8" },
+          { mimeType: "video/webm;codecs=vp8,opus" },
+          { mimeType: "video/webm;codecs=vp8,vorbis" },
           { mimeType: "video/webm;codecs=vp9" },
+          { mimeType: "video/webm;codecs=vp9,opus" },
+          { mimeType: "video/webm;codecs=vp9,vorbis" },
           { mimeType: "video/webm;codecs=h264" },
+          { mimeType: "video/webm" },
+          { mimeType: "video/mpeg" },
           { mimeType: "video/mp4;codecs=h264" },
           { mimeType: "video/mp4;codecs=avc1" },
+          { mimeType: "video/mp4;codecs=avc1,opus" },
+          { mimeType: "video/mp4;codecs=avc1,mp4a" },
+          { mimeType: "video/mp4" },
           { mimeType: "video/3gpp" },
           { mimeType: "video/ogg" },
           { mimeType: "video/quicktime" },
@@ -394,8 +407,11 @@
         const audioCodecs = [
           { mimeType: "audio/webm;codecs=opus" },
           { mimeType: "audio/webm;codecs=vorbis" },
+          { mimeType: "audio/webm" },
           { mimeType: "audio/mp4;codecs=mp4a" },
           { mimeType: "audio/mp4;codecs=aac" },
+          { mimeType: "audio/mp4;codecs=mp3" },
+          { mimeType: "audio/mp4;codecs=opus" },
           { mimeType: "audio/mp4" },
           { mimeType: "audio/ogg" },
           { mimeType: "audio/wav" },
@@ -415,6 +431,9 @@
             li.textContent = `${codec.mimeType} - ${
               isSupported ? "Supported" : "Not Supported"
             }`;
+            if (isSupported) {
+              li.classList.add('supported-codec');
+            }
             videoCodecsList.appendChild(li);
           } catch (error) {
             const li = document.createElement("li");
@@ -431,6 +450,9 @@
             li.textContent = `${codec.mimeType} - ${
               isSupported ? "Supported" : "Not Supported"
             }`;
+            if (isSupported) {
+              li.classList.add('supported-codec');
+            }
             audioCodecsList.appendChild(li);
           } catch (error) {
             const li = document.createElement("li");
