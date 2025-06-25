@@ -143,6 +143,13 @@
     </p>
     <p>Click the "Start" button to begin.</p>
 
+    <div class="wrapper">
+      <h3>Camera Selection:</h3>
+      <select id="cameraSelect" style="width: 100%; padding: 8px; margin-bottom: 20px; box-sizing: border-box;">
+        <option value="">Default Camera</option>
+      </select>
+    </div>
+
     <h3>Constrainable properties available:</h3>
     <ul id="supportedConstraints"></ul>
 
@@ -221,6 +228,7 @@
       );
       const videoSettingsText = document.getElementById("videoSettingsText");
       const audioSettingsText = document.getElementById("audioSettingsText");
+      const cameraSelect = document.getElementById("cameraSelect");
 
       videoConstraintEditor.value = videoDefaultConstraintString;
       audioConstraintEditor.value = audioDefaultConstraintString;
@@ -247,6 +255,12 @@
         try {
           videoConstraints = JSON.parse(videoConstraintEditor.value);
           audioConstraints = JSON.parse(audioConstraintEditor.value);
+          
+          // Add deviceId constraint if a specific camera is selected
+          const selectedCamera = cameraSelect.value;
+          if (selectedCamera) {
+            videoConstraints.deviceId = { exact: selectedCamera };
+          }
         } catch (error) {
           handleError(error);
         }
@@ -462,8 +476,36 @@
         }
       }
 
-      // Call codec detection when the page loads
+      // Function to enumerate and populate camera devices
+      async function populateCameraDevices() {
+        try {
+          // First get permission to access devices
+          await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+          
+          // Now enumerate devices
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const videoDevices = devices.filter(device => device.kind === 'videoinput');
+          
+          // Clear existing options except the default
+          cameraSelect.innerHTML = '<option value="">Default Camera</option>';
+          
+          // Add each camera device as an option
+          videoDevices.forEach((device, index) => {
+            const option = document.createElement('option');
+            option.value = device.deviceId;
+            option.textContent = device.label || `Camera ${index + 1}`;
+            cameraSelect.appendChild(option);
+          });
+          
+          log(`Found ${videoDevices.length} camera device(s)`);
+        } catch (error) {
+          log(`Error enumerating devices: ${error.message}`);
+        }
+      }
+
+      // Call codec detection and device enumeration when the page loads
       detectCodecs();
+      populateCameraDevices();
     </script>
   </body>
 </html>
